@@ -6,6 +6,7 @@ import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, A
 import { RankingPoster } from "@/components/ranking-poster";
 import { COUNTRIES, emptyRanking, isComplete, nextEmpty, placeCountry, restoreRanking, STORAGE_KEY, type Country } from "@/lib/ranking";
 import { HEARTS } from "@/lib/heart-assets";
+import { VoteBox } from "@/components/vote-box";
 const background = "/ranking-background.jpg";
 const font = "/singing-sans.ttf";
 
@@ -147,15 +148,15 @@ function Index() {
           <div className="country-grid">
             {remaining.map((country) => <Button variant="country" key={country} onClick={() => pick(country)} aria-label={`Pick ${country}`}><img className="heart-flag" src={HEARTS[country]} alt="" /><span>{country}</span></Button>)}
           </div>
-          {complete && <div className="picker-complete"><Check /><h3>All 16 ranked!</h3><p>Your poster is ready.</p></div>}
+          {complete && <div className="picker-complete"><Check /><h3>All 16 ranked!</h3><p>Your poster is ready.</p><VoteBox ranking={ranking} /></div>}
         </section>
       </main>
     </> : <>
       <header className="preview-heading"><h1>Your ranking poster</h1><span className="complete-tag"><Check size={15} /> 16/16</span></header>
-      <main><RankingPoster ranking={ranking} posterRef={posterRef} />{exportError && <p className="export-error" role="alert">{exportError}</p>}</main>
+      <main><RankingPoster ranking={ranking} posterRef={posterRef} /><VoteBox ranking={ranking} />{exportError && <p className="export-error" role="alert">{exportError}</p>}</main>
     </>}
     {storageError && <p className="export-error" role="alert">Your browser couldn't save your progress. Keep this page open to retain your ranking.</p>}
-    <footer className="asset-credit">Heart flags: <a href="https://commons.wikimedia.org/wiki/File:Eurovision_2026_white_heart_-_Georgia.svg" target="_blank" rel="noreferrer">Wikimedia Commons · EBU / ImStevan</a></footer>
+    <footer className="asset-credit"><a href="/results">Results table</a> · Heart flags: <a href="https://commons.wikimedia.org/wiki/File:Eurovision_2026_white_heart_-_Georgia.svg" target="_blank" rel="noreferrer">Wikimedia Commons · EBU / ImStevan</a></footer>
     <div className="action-bar"><div className="action-inner">
       {preview ? <Button variant="ghost" onClick={() => { setPreview(false); setExportError(""); }}><ArrowLeft /> Edit</Button> : <Button variant="ghost" className="action-reset" onClick={() => setConfirmReset(true)} disabled={count === 0}><RotateCcw /> Reset</Button>}
       <span className="action-hint">{preview ? "Made by you. Ready to share." : "Your countries. Your order."}</span>
